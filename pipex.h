@@ -6,7 +6,7 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 12:20:21 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/13 12:52:02 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/11/15 15:32:08 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #endif
