@@ -6,14 +6,24 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 12:23:39 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/15 15:32:52 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/11/15 18:18:30 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	main(int argc, char **argv)
+char **getcmd(char **argv)
 {
+	char **args = ft_split(argv[1], ' ');
+	return args;
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	char **cmd = getcmd(argv);
+	char **path = ft_split(env[31], ':');
+	char *ping = ft_strjoin("/", cmd[0]);
+	ping = ft_strjoin(path[5], ping);
+
 	int fd[2];
 	if (pipe(fd) == -1)
 		return (1);
@@ -35,7 +45,7 @@ int	main(int argc, char **argv)
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[0]);
 		close(fd[1]);
-		execve("../../../../sbin/ping", args1, NULL);
+		execve(ping, cmd, NULL);
 	}
 
 	int pid2 = fork();

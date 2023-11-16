@@ -1,0 +1,3 @@
+!! path is hardcoded to env[31] !!
+
+!! cmd ping and grep hardcoded check with access function on path[i] before execve !!
