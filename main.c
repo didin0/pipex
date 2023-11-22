@@ -6,7 +6,7 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 12:23:39 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/15 17:51:34 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/11/22 14:29:26 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,28 @@ char **getcmd(char **argv)
 	return args;
 }
 
+char *getpath(char **env)
+{
+	int i = 0;
+	
+	while(env[i])
+	{
+		if(ft_strncmp(env[i], "PATH", 4) == 0)
+		{
+			return (env[i]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 int	main(int argc, char **argv, char **env)
 {
-
-	char **str = ft_split("abcd", ' ');
-	printf("%s", str[0]);
+// int i = 0;
+// 	while(env[i]){
+// 		printf("%d : %s\n", i, env[i]);
+// 	i++;
+// 	}
+	printf("%d", ft_strncmp(env[19], "PATH", 4));
 	return (0);
 }
