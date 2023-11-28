@@ -5,32 +5,94 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 12:23:39 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/24 18:29:11 by mabbadi          ###   ########.fr       */
+/*   Created: 2023/11/28 18:50:03 by mabbadi           #+#    #+#             */
+/*   Updated: 2023/11/28 19:08:01 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void	child(int fd[2], char **argv, char **env)
+{
+	int		infile;
+	char	**cmd;
+	char	*path;
+
+	close(fd[0]);
+	infile = open(argv[1], O_RDONLY, 0777);
+	if (infile < 0)
+	{
+		close(fd[1]);
+		perror("open");
+		exit(errno);
+	}
+	cmd = getcmd(argv, 2);
+	path = getpath(cmd, env);
+	dup2(infile, STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
+	close(fd[1]);
+	if (execve(path, cmd, NULL) == -1)
+	{
+		perror("execve");
+		exit(errno); // print la mauvaise erreur 14 au lieu de 127
+	}
+	close(infile);
+}
+
+void	parent(int fd[2], char **argv, char **env)
+{
+	int		outfile;
+	char	**cmd2;
+	char	*path2;
+
+	close(fd[1]);
+	outfile = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (outfile < 0)
+	{
+		close(fd[0]);
+		perror("open");
+		exit(errno);
+	}
+	cmd2 = getcmd(argv, 3);
+	path2 = getpath(cmd2, env);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(outfile, STDOUT_FILENO);
+	close(fd[0]);
+
+
+	if (execve(path2, cmd2, NULL) == -1)
+	{
+		perror("execve");
+		exit(errno); // print la mauvaise erreur 14 au lieu de 127
+	}
+	close(outfile);
+	freetab(cmd2);
+}
+
 int	main(int argc, char **argv, char **env)
 {
-	char **cmd = getcmd(argv, 1);
-	char *path = getpath(cmd, env);
-	int fd[2];
-	pid_t pid;
+	int		fd[2];
+	pid_t	pid1;
 
-
-	// AFFICHAGE
-	int i = 0;
-	while(cmd[i])
+	if (argc < 4)
+		return (0);
+	if (pipe(fd) < 0)
 	{
-		printf("args %d : <%s> | ",i, cmd[i]);
-		i++;
+		perror("pipe");
+		return (1);
 	}
-	printf("\npath : %s", path);
-	// END
-
-	freetab(cmd);
-	free(path);
+	pid1 = fork();
+	if (pid1 < 0)
+	{
+		perror("fork");
+		return (2);
+	}
+	if (pid1 == 0)
+		child(fd, argv, env);
+	else
+	{
+		parent(fd, argv, env);
+		waitpid(pid1, NULL, 0);
+	}
 	return (0);
 }
