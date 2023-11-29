@@ -6,11 +6,22 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 18:50:03 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/28 19:08:01 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/11/29 21:13:37 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	checkexec(char *path, char **cmd)
+{
+	if (execve(path, cmd, NULL) == -1)
+	{
+		freetab(cmd);
+		free(path);
+		perror("bash");
+		exit(127);
+	}
+}
 
 void	child(int fd[2], char **argv, char **env)
 {
@@ -31,11 +42,9 @@ void	child(int fd[2], char **argv, char **env)
 	dup2(infile, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
-	if (execve(path, cmd, NULL) == -1)
-	{
-		perror("execve");
-		exit(errno); // print la mauvaise erreur 14 au lieu de 127
-	}
+	checkexec(path, cmd);
+	freetab(cmd);
+	free(path);
 	close(infile);
 }
 
@@ -58,14 +67,9 @@ void	parent(int fd[2], char **argv, char **env)
 	dup2(fd[0], STDIN_FILENO);
 	dup2(outfile, STDOUT_FILENO);
 	close(fd[0]);
-
-
-	if (execve(path2, cmd2, NULL) == -1)
-	{
-		perror("execve");
-		exit(errno); // print la mauvaise erreur 14 au lieu de 127
-	}
+	checkexec(path2, cmd2);
 	close(outfile);
+	free(path2);
 	freetab(cmd2);
 }
 

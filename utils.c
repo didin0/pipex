@@ -6,7 +6,7 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:56:12 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/24 17:56:32 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/11/29 21:06:44 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ char	*getenvpath(char **env)
 
 char	*getpath(char **cmd, char **env)
 {
-	int		i;
 	char	**paths;
 	char	*path;
 	char	*tmpcmd;
+	int		i;
 
 	paths = ft_split(getenvpath(env) + 5, ':');
 	i = 0;
