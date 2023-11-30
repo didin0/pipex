@@ -6,7 +6,7 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:56:12 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/29 21:06:44 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/11/30 16:03:59 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,15 @@ char	*getpath(char **cmd, char **env)
 	}
 	freetab(paths);
 	return (NULL);
+}
+
+void	printerror(char *cmd)
+{
+	if (errno == EFAULT)
+	{
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(":", 2);
+		ft_putstr_fd(" Command not found", 2);
+		ft_putstr_fd("\n", 2);
+	}
 }

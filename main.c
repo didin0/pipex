@@ -6,7 +6,7 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 18:50:03 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/29 21:13:37 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/11/30 16:09:53 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	checkexec(char *path, char **cmd)
 {
 	if (execve(path, cmd, NULL) == -1)
 	{
+		printerror(cmd[0]);
 		freetab(cmd);
 		free(path);
-		perror("bash");
 		exit(127);
 	}
 }
@@ -34,7 +34,7 @@ void	child(int fd[2], char **argv, char **env)
 	if (infile < 0)
 	{
 		close(fd[1]);
-		perror("open");
+		perror(argv[1]);
 		exit(errno);
 	}
 	cmd = getcmd(argv, 2);
@@ -43,8 +43,6 @@ void	child(int fd[2], char **argv, char **env)
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
 	checkexec(path, cmd);
-	freetab(cmd);
-	free(path);
 	close(infile);
 }
 
@@ -69,8 +67,6 @@ void	parent(int fd[2], char **argv, char **env)
 	close(fd[0]);
 	checkexec(path2, cmd2);
 	close(outfile);
-	free(path2);
-	freetab(cmd2);
 }
 
 int	main(int argc, char **argv, char **env)

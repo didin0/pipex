@@ -6,7 +6,7 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 12:20:21 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/28 14:57:08 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/11/30 15:51:43 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ void	freetab(char **str);
 char	**getcmd(char **argv, int i);
 char	*getenvpath(char **env);
 char	*getpath(char **cmd, char **env);
+void	printerror(char *cmd);
 
 #endif
