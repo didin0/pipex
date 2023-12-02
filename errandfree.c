@@ -1,30 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   errandfree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 12:20:21 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/12/02 18:46:21 by mabbadi          ###   ########.fr       */
+/*   Created: 2023/12/02 16:06:19 by mabbadi           #+#    #+#             */
+/*   Updated: 2023/12/02 16:06:53 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "pipex.h"
 
-# include "libft/libft.h"
-# include <errno.h>
-# include <fcntl.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/wait.h>
-# include <unistd.h>
+void	freetab(char **str)
+{
+	int	i;
 
-void	freetab(char **str);
-char	**getcmd(char **argv, int i);
-char	*getenvpath(char **env);
-char	*getpath(char **cmd, char **env);
-void	printerror(char *cmd);
+	i = 0;
+	if (str)
+	{
+		while (str[i])
+			free(str[i++]);
+		free(str);
+	}
+}
 
-#endif
+void	printerror(char *cmd)
+{
+	if (errno == EFAULT)
+	{
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(":", 2);
+		ft_putstr_fd(" Command not found", 2);
+		ft_putstr_fd("\n", 2);
+	}
+}

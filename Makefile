@@ -6,7 +6,7 @@
 #    By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 16:34:15 by mabbadi           #+#    #+#              #
-#    Updated: 2023/11/29 20:54:12 by mabbadi          ###   ########.fr        #
+#    Updated: 2023/12/02 16:07:23 by mabbadi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ FLAGS = -Wall -Wextra -Werror -g3
 # Liste des fichiers source
 SOURCES := main.c \
 					utils.c \
+					errandfree.c \
 		   $(wildcard Libft/*.c) \
 
 # Liste des fichiers d'en-tête

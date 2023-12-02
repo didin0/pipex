@@ -6,27 +6,19 @@
 /*   By: mabbadi <mabbadi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 17:56:12 by mabbadi           #+#    #+#             */
-/*   Updated: 2023/11/30 16:03:59 by mabbadi          ###   ########.fr       */
+/*   Updated: 2023/12/02 21:21:51 by mabbadi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	freetab(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		free(str[i++]);
-	free(str);
-}
 
 char	**getcmd(char **argv, int i)
 {
 	char	**args;
 
 	args = ft_split(argv[i], ' ');
+	if (!args)
+		return (NULL);
 	return (args);
 }
 
@@ -49,7 +41,7 @@ char	*getpath(char **cmd, char **env)
 
 	paths = ft_split(getenvpath(env) + 5, ':');
 	i = 0;
-	while (paths[i])
+	while (paths && paths[i])
 	{
 		tmpcmd = ft_strjoin("/", cmd[0]);
 		path = ft_strjoin(paths[i], tmpcmd);
@@ -63,17 +55,7 @@ char	*getpath(char **cmd, char **env)
 		free(path);
 		i++;
 	}
-	freetab(paths);
+	if (paths)
+		freetab(paths);
 	return (NULL);
-}
-
-void	printerror(char *cmd)
-{
-	if (errno == EFAULT)
-	{
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(":", 2);
-		ft_putstr_fd(" Command not found", 2);
-		ft_putstr_fd("\n", 2);
-	}
 }
